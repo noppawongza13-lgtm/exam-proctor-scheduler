@@ -1,0 +1,18 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<script>
+window.jsErrors = [];
+window.onerror = function(msg, url, line) {
+  window.jsErrors.push(msg + ' at line ' + line);
+};
+</script>
+<script src="bundle.js"></script>
+<script>
+window.onload = function() {
+  document.body.innerText = window.jsErrors.length > 0 ? 'ERRORS: ' + window.jsErrors.join(', ') : 'OK_NO_ERRORS';
+};
+</script>
+</head>
+<body></body>
+</html>

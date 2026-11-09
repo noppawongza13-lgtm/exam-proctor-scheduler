@@ -1,0 +1,32 @@
+﻿{
+    "name":  "exam-proctor-scheduler",
+    "version":  "1.0.0",
+    "description":  "เธฃเธฐเธเธเธเธฑเธ”เธ•เธฒเธฃเธฒเธเธเธนเนเธเธธเธกเธชเธญเธ โ€” Exam Proctor Scheduling System (Open Source with AI Agent)",
+    "license":  "MIT",
+    "keywords":  [
+                     "exam-scheduler",
+                     "proctor-scheduling",
+                     "constraint-satisfaction",
+                     "ai-agent",
+                     "open-source"
+                 ],
+    "type":  "module",
+    "scripts":  {
+                    "dev":  "node server.js",
+                    "build":  "vite build",
+                    "preview":  "vite preview",
+                    "test":  "vitest run",
+                    "test:watch":  "vitest"
+                },
+    "dependencies":  {
+                         "chart.js":  "^4.4.4",
+                         "jspdf":  "^2.5.2",
+                         "jspdf-autotable":  "^3.8.3",
+                         "seedrandom":  "^3.0.5",
+                         "xlsx":  "^0.18.5"
+                     },
+    "devDependencies":  {
+                            "vite":  "^5.4.8",
+                            "vitest":  "^2.1.2"
+                        }
+}

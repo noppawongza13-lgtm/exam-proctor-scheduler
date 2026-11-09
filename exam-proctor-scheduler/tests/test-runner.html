@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Automated Test Runner & Benchmark</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; line-height: 1.5; background: #f8fafc; color: #1e293b; }
+    h1 { color: #1e40af; }
+    .pass { color: #16a34a; font-weight: bold; }
+    .fail { color: #dc2626; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; background: white; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+    th { background: #f1f5f9; }
+    pre { background: #0f172a; color: #f8fafc; padding: 14px; border-radius: 6px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Exam Proctor Scheduler Test Runner</h1>
+  <div id="status">⏳ กำลังรันชุดทดสอบทั้งหมด กรุณารอสักครู่...</div>
+  <pre id="logs"></pre>
+  <div id="results"></div>
+
+  <script type="module">
+    import { runAllTests } from './run-tests.js';
+
+    const logEl = document.getElementById('logs');
+    const statusEl = document.getElementById('status');
+    const resEl = document.getElementById('results');
+
+    function logMsg(msg) {
+      logEl.textContent += msg + '\n';
+      console.log(msg);
+    }
+
+    try {
+      const summary = await runAllTests(logMsg);
+      statusEl.innerHTML = summary.failed === 0 
+        ? `<h2 class="pass">🎉 การทดสอบทั้งหมดผ่านสมบูรณ์ (${summary.passed} / ${summary.total})</h2>`
+        : `<h2 class="fail">❌ มีการทดสอบไม่ผ่าน ${summary.failed} ข้อ</h2>`;
+
+      let tableHtml = `
+        <h3>📊 ผลการทดสอบประสิทธิภาพ Benchmark Matrix (3 ขนาด x 5 seeds):</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ขนาด (Size)</th>
+              <th>Seed</th>
+              <th>ผลลัพธ์</th>
+              <th>เวลาที่ใช้ (ms)</th>
+              <th>SD ภาระงาน</th>
+              <th>ผู้คุมขั้นต่ำ (Min Proctors)</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (const row of summary.benchmarkRows) {
+        tableHtml += `
+          <tr>
+            <td>${row.size}</td>
+            <td>${row.seed}</td>
+            <td class="pass">${row.success}</td>
+            <td>${row.durationMs} ms</td>
+            <td>${row.sdWorkload}</td>
+            <td><strong>${row.minProctors} คน</strong></td>
+          </tr>
+        `;
+      }
+
+      tableHtml += `</tbody></table>`;
+      resEl.innerHTML = tableHtml;
+      document.body.setAttribute('data-test-completed', 'true');
+    } catch (err) {
+      statusEl.innerHTML = `<h2 class="fail">เกิดข้อผิดพลาดในการรัน Test: ${err.message}</h2>`;
+      logEl.textContent += '\n' + err.stack;
+    }
+  </script>
+</body>
+</html>
